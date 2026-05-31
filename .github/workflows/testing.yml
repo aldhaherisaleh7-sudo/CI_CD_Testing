@@ -24,8 +24,8 @@ jobs:
           php-version: '8.4'
           
       - name: "copy env:"
-        run: cp .env.example .env.example
-
+        run: cp .env.example .env
+        
       - name: "install dependacies"
         run: composer install
 
