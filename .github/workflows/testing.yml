@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: checkout out
-        uses: action/checkout@v4
+        uses: actions/checkout@v4
 
       - name: setup_php
         uses: shivammathur/setup-php@v2
