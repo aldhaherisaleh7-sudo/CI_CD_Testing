@@ -14,7 +14,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd /var/www/CI_testing_run_workflow
+            cd /var/www/CI_CD_Testing
             sudo git pull origin main
             sudo php artisan mgirate --force
             sudo composer install --no-interaction --prefer-dist --optimize-autoloader
