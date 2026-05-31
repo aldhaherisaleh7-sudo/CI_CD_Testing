@@ -1,0 +1,86 @@
+name: quality_check
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  workflow_dispatch:
+
+jobs:
+  testing:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: ci_cd_testing
+        ports:
+          - 3306:3306
+          
+    steps:
+      - name: checkout out
+        uses: actions/checkout@v4
+
+      - name: setup_php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          
+      - name: "copy env:"
+        run: cp .env.example .env
+        
+      - name: "install dependacies"
+        run: composer install
+
+      - name: "generate app key"
+        run: php artisan key:generate
+
+      - name: "static file analysis"
+        run: php artisan test
+        env:
+            DB_CONNECTION: mysql
+            DB_HOST: 127.0.0.1
+            DB_PORT: 3306
+            DB_DATABASE: ci_cd_testing
+            DB_USERNAME: root
+            DB_PASSWORD: password
+
+      - name: "test coverage"
+        run: php artisan test --coverage
+        env:
+            DB_CONNECTION: mysql
+            DB_HOST: 127.0.0.1
+            DB_PORT: 3306
+            DB_DATABASE: ci_cd_testing
+            DB_USERNAME: root
+            DB_PASSWORD: password
+  
+  static_anaysis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: setup_php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+
+      - name: "copy env"
+        run: cp .env.example .env
+        
+      - name: "install dependacies"
+        run: composer install
+
+      - name: "generate app key"
+        run: php artisan key:generate
+        
+      - name: "install phpstan"
+        run: composer require --dev phpstan/phpstan
+
+      - name: run static code analysis
+        run:  vendor/bin/phpstan analyse -l 6 app
