@@ -24,7 +24,7 @@ jobs:
           php-version: '8.4'
 
       - name: "copy env"
-        run: cp .example.env .env
+        run: cp .env.example .env
 
       - name: "generate app key"
         run: php artisan key:generate
