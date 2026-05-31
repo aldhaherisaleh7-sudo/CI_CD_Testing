@@ -1,0 +1,40 @@
+name: testing
+
+on: 
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  testing:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout out
+        uses: action/checkout@v4
+
+      - name: setup_php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          
+      - name: "copy env:"
+        run: cp .env.example .env.example
+
+      - name: "install dependacies"
+        run: composer install
+
+      - name: "static file analysis"
+        run: php artisan test
+
+      - name: "test coverage"
+        run: php artisan test --coverage
+
+         
+        
+    
