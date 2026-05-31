@@ -25,13 +25,13 @@ jobs:
 
       - name: "copy env"
         run: cp .env.example .env
-
-      - name: "generate app key"
-        run: php artisan key:generate
         
       - name: "install dependacies"
         run: composer install
 
+      - name: "generate app key"
+        run: php artisan key:generate
+        
       - name: "install phpstan"
         run: composer require --dev phpstan/phpstan
 
