@@ -1,7 +1,8 @@
 name: formatting
 
 on:
-  push
+  push:
+  workflow_dispatch: 
   
 jobs:
   fix-styling:
