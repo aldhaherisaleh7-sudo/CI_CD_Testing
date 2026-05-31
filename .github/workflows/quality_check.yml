@@ -1,4 +1,4 @@
-name: quality_check
+name: Quality Check
 
 on:
   push:
