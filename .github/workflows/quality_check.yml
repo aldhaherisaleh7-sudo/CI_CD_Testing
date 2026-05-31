@@ -59,6 +59,7 @@ jobs:
             DB_PASSWORD: password
   
   static_anaysis:
+    needs: testing
     runs-on: ubuntu-latest
 
     steps:
