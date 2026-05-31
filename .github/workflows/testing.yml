@@ -29,6 +29,9 @@ jobs:
       - name: "install dependacies"
         run: composer install
 
+      - name: "generate app key"
+        run: php artisan key:generate
+
       - name: "static file analysis"
         run: php artisan test
 
