@@ -1,0 +1,35 @@
+name: formatting
+
+on:
+  push
+  
+jobs:
+  fix-styling:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'formatting')"
+
+    steps:
+      - name: "fix permisions"
+        run: sudo chown -R $(whoami):$(whoami) ${{ github.workspace}}
+
+      - name: checkout
+        uses: actions/checkout@v6
+        with:
+          ref: ${{github.head_ref}}
+          clean: true
+          fetch-depth: 1
+
+      - name: "install pint"
+        run: composer global require laravel/pint --no-progress
+
+      - name: formating
+        run: $(composer gloable config bin-dir --absolute)/pint --parallel
+
+      - name: commit
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: formatting
+        
+      - name: Post-job cleanup
+        if: always()
+        run: git clean -ffdx 2>/dev/null || true
